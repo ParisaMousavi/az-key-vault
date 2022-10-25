@@ -67,3 +67,7 @@ variable "network_acls" {
   })
 }
 
+variable "object_ids" {
+  type        = list(string)
+  description = "List of identity/sp's object_ids to get full access."
+}

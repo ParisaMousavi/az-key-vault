@@ -26,3 +26,26 @@ resource "azurerm_key_vault" "this" {
     },
   )
 }
+
+resource "azurerm_key_vault_access_policy" "this" {
+  for_each     = var.object_ids
+  key_vault_id = azurerm_key_vault.this.id
+  tenant_id    = var.tenant_id
+  object_id    = each.value
+
+  certificate_permissions = [
+    "Backup", "Create", "Delete", "DeleteIssuers", "Get", "GetIssuers", "Import", "List", "ListIssuers", "ManageContacts", "ManageIssuers", "Recover", "Restore", "SetIssuers", "Update"
+  ]
+
+  key_permissions = [
+    "Get", "List", "Create", "Delete", "Update", "Recover", "Restore",
+  ]
+
+  secret_permissions = [
+    "Get", "List", "Set", "Delete", "Recover", "Restore",
+  ]
+
+  storage_permissions = [
+    "Get", "List", "Set", "Delete", "Update", "Recover", "Restore",
+  ]
+}
