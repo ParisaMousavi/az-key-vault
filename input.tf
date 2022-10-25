@@ -14,6 +14,10 @@ variable "tenant_id" {
   type = string
 }
 
+variable "stage" {
+  type = string
+}
+
 variable "soft_delete_retention_days" {
   type    = number
   default = 60
