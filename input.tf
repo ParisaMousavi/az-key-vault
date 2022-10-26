@@ -48,6 +48,12 @@ variable "enable_rbac_authorization" {
   default = false
 }
 
+variable "public_network_access_enabled" {
+  description = "This is set to true usually when the Private Endpoint is used."
+  type        = bool
+  default     = false
+}
+
 variable "sku_name" {
   type    = string
   default = "standard"
@@ -70,4 +76,11 @@ variable "network_acls" {
 variable "object_ids" {
   type        = list(string)
   description = "List of identity/sp's object_ids to get full access."
+}
+
+variable "private_endpoint_config" {
+  type = object({
+    subnet_id            = string
+    private_dns_zone_ids = list(string)
+  })
 }

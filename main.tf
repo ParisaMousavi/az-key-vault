@@ -9,7 +9,9 @@ resource "azurerm_key_vault" "this" {
   enabled_for_deployment          = var.enabled_for_deployment
   enabled_for_template_deployment = var.enabled_for_template_deployment
   enable_rbac_authorization       = var.enable_rbac_authorization
-  sku_name                        = "standard"
+  # This is set to true usually when the Private Endpoint is used.
+  public_network_access_enabled = var.public_network_access_enabled
+  sku_name                      = var.sku_name
   dynamic "network_acls" {
     for_each = var.network_acls.bypass != null ? [0] : []
     content {
@@ -48,4 +50,29 @@ resource "azurerm_key_vault_access_policy" "this" {
   storage_permissions = [
     "Get", "List", "Set", "Delete", "Update", "Recover", "Restore",
   ]
+}
+
+#---------------------------------------------------------
+# Provisioning with Private Endpoint
+#---------------------------------------------------------
+resource "azurerm_private_endpoint" "endpoint" {
+  for_each            = var.private_endpoint_config.subnet_id != null ? [0] : []
+  name                = "${var.name}-pe"
+  location            = azurerm_key_vault.this.location
+  resource_group_name = azurerm_key_vault.this.resource_group_name
+  subnet_id           = var.private_endpoint_config.subnet_id
+  private_service_connection {
+    name                           = "${var.name}-psc"
+    private_connection_resource_id = azurerm_key_vault.this.id
+    is_manual_connection           = false
+    # Reference page for subresource_names
+    # https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview
+    subresource_names = ["vault"]
+  }
+  private_dns_zone_group {
+    # Reference page
+    # https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns
+    name                 = "privatelink.vaultcore.azure.net"
+    private_dns_zone_ids = var.private_endpoint_config.private_dns_zone_ids
+  }
 }
