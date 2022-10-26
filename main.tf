@@ -56,7 +56,7 @@ resource "azurerm_key_vault_access_policy" "this" {
 # Provisioning with Private Endpoint
 #---------------------------------------------------------
 resource "azurerm_private_endpoint" "endpoint" {
-  for_each            = var.private_endpoint_config.subnet_id != null ? [0] : []
+  count               = var.private_endpoint_config.subnet_id == null ? 0 : 1
   name                = "${var.name}-pe"
   location            = azurerm_key_vault.this.location
   resource_group_name = azurerm_key_vault.this.resource_group_name
@@ -65,9 +65,9 @@ resource "azurerm_private_endpoint" "endpoint" {
     name                           = "${var.name}-psc"
     private_connection_resource_id = azurerm_key_vault.this.id
     is_manual_connection           = false
+    subresource_names              = ["vault"]
     # Reference page for subresource_names
     # https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview
-    subresource_names = ["vault"]
   }
   private_dns_zone_group {
     # Reference page
