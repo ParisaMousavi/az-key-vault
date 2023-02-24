@@ -55,7 +55,7 @@ resource "azurerm_key_vault_access_policy" "this" {
 #---------------------------------------------------------
 # Provisioning with Private Endpoint
 #---------------------------------------------------------
-resource "azurerm_private_endpoint" "endpoint" {
+resource "azurerm_private_endpoint" "this" {
   count               = var.private_endpoint_config.subnet_id == null ? 0 : 1
   name                = "${var.name}-pe"
   location            = azurerm_key_vault.this.location
@@ -69,10 +69,18 @@ resource "azurerm_private_endpoint" "endpoint" {
     # Reference page for subresource_names
     # https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview
   }
-  private_dns_zone_group {
-    # Reference page
-    # https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns
-    name                 = "privatelink.vaultcore.azure.net"
-    private_dns_zone_ids = var.private_endpoint_config.private_dns_zone_ids
-  }
+  # private_dns_zone_group {
+  #   # Reference page
+  #   # https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns
+  #   name                 = "${var.name}-psc" # Private Service Connection Name
+  #   private_dns_zone_ids = var.private_endpoint_config.private_dns_zone_id
+  # }
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "this" {
+  count                 = var.private_endpoint_config.private_dns_zone_name == null || var.private_endpoint_config.virtual_network_id == null ? 0 : 1
+  name                  = "${var.name}-sub2dns"
+  resource_group_name   = azurerm_resource_group.example.name
+  private_dns_zone_name = var.private_endpoint_config.private_dns_zone_name
+  virtual_network_id    = var.private_endpoint_config.virtual_network_id
 }
