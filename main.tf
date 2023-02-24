@@ -80,7 +80,7 @@ resource "azurerm_private_endpoint" "this" {
 resource "azurerm_private_dns_zone_virtual_network_link" "this" {
   count                 = var.private_endpoint_config.private_dns_zone_name == null || var.private_endpoint_config.virtual_network_id == null ? 0 : 1
   name                  = "${var.name}-sub2dns"
-  resource_group_name   = azurerm_resource_group.example.name
+  resource_group_name   = var.resource_group_name
   private_dns_zone_name = var.private_endpoint_config.private_dns_zone_name
   virtual_network_id    = var.private_endpoint_config.virtual_network_id
 }
