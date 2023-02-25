@@ -86,8 +86,3 @@ variable "private_endpoint_config" {
     private_dns_zone_name = optional(string, null)
   })
 }
-
-variable "workload_identity_enabled" {
-  type    = bool
-  default = false
-}

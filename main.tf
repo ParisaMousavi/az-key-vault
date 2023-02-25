@@ -11,7 +11,6 @@ resource "azurerm_key_vault" "this" {
   enable_rbac_authorization       = var.enable_rbac_authorization
   # This is set to true usually when the Private Endpoint is used.
   public_network_access_enabled = var.public_network_access_enabled
-  workload_identity_enabled     = var.workload_identity_enabled
   sku_name                      = var.sku_name
   dynamic "network_acls" {
     for_each = var.network_acls.bypass != null ? [0] : []
