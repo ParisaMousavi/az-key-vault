@@ -90,6 +90,6 @@ resource "azurerm_dns_a_record" "this" {
   zone_name           = var.private_endpoint_config.private_dns_zone_name
   resource_group_name = var.resource_group_name
   ttl                 = 300
-  records             = [azurerm_private_endpoint.this.network_interface.id]
+  records             = [azurerm_private_endpoint.this.network_interface[0].id]
 }
 
