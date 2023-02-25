@@ -84,3 +84,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "this" {
   private_dns_zone_name = var.private_endpoint_config.private_dns_zone_name
   virtual_network_id    = var.private_endpoint_config.virtual_network_id
 }
+
+output "xyz" {
+  value = azurerm_private_dns_zone_virtual_network_link.this
+}
