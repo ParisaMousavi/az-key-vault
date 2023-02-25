@@ -85,11 +85,4 @@ resource "azurerm_private_dns_zone_virtual_network_link" "this" {
   virtual_network_id    = var.private_endpoint_config.virtual_network_id
 }
 
-resource "azurerm_dns_a_record" "this" {
-  name                = "${var.name}.vault.azure.net"
-  zone_name           = var.private_endpoint_config.private_dns_zone_name
-  resource_group_name = var.resource_group_name
-  ttl                 = 300
-  records             = [azurerm_private_endpoint.this[0].network_interface[0].id]
-}
 
