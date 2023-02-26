@@ -15,5 +15,5 @@ output "vault_uri" {
 }
 
 output "network_interface_id" {
-  value = azurerm_private_endpoint.this.network_interface.0.id
+  value = azurerm_private_endpoint[0].this.network_interface.0.id
 }
