@@ -72,9 +72,15 @@ resource "azurerm_private_endpoint" "this" {
   private_dns_zone_group {
     # Reference page
     # https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns
-    name                 = "${var.name}-psc" # Private Service Connection Name
+    name                 = "${var.name}-psc-group" # Private Service Connection Name
     private_dns_zone_ids = [var.private_endpoint_config.private_dns_zone_id]
   }
+  tags = merge(
+    var.additional_tags,
+    {
+      created-by = "iac-tf"
+    },
+  )
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "this" {
