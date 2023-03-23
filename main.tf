@@ -83,5 +83,7 @@ resource "azurerm_private_endpoint" "this" {
   )
 }
 
-
+# https://learn.microsoft.com/en-us/azure/container-registry/container-registry-quickstart-task-cli
+# az group create --name myResourceGroup --location eastus
+# az acr build --image sample/hello-world:v1 --registry projacrappdevweu --file Dockerfile .
 
