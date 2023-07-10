@@ -44,7 +44,7 @@ resource "azurerm_key_vault_access_policy" "this" {
   ]
 
   secret_permissions = [
-    "Get", "List", "Set", "Delete", "Recover", "Restore",
+    "Get", "List", "Set", "Delete", "Recover", "Restore", "Backup", "Purge", 
   ]
 
   storage_permissions = [
